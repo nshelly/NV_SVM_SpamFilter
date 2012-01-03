@@ -1,0 +1,23 @@
+*~
+*.orig
+*.pyc
+*.rej
+*.swp
+*.db
+.installed.cfg
+__minitage__*
+bin/*
+develop-eggs
+downloads
+eggs
+log
+parts
+project/media/uploads
+tmp
+static/admin
+
+# User-added documents
+media/documents
+
+# For PyCharm IDE
+.idea/*

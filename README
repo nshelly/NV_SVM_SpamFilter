@@ -1,0 +1,11 @@
+Bayesian and SVM Spam Filter by Nicholas Shelly
+Date: 3 Jan 2012
+The primary classification uses a Naive Bayesian model, with auto-learning capability 
+based on email with really high or really low spamtiscity.
+Compares the results to a more reliable but slower Support Vector Machine (SVM) classifier.
+
+For the SVM classifier, please download this package from here: http://bit.ly/2rwxl, and
+add to the path.
+
+Sample output:
+
