@@ -1,11 +1,71 @@
-Bayesian and SVM Spam Filter by Nicholas Shelly
+A Bayesian and SVM Spam Filter by Nicholas Shelly
 Date: 3 Jan 2012
-The primary classification uses a Naive Bayesian model, with auto-learning capability 
-based on email with really high or really low spamtiscity.
-Compares the results to a more reliable but slower Support Vector Machine (SVM) classifier.
+This is a very quick and rudimentary spam filter, which compares a few techniques including:
+- A Naive Bayesian classification based on the and Laplace (additive) smoothing
+- Auto-learning to retraining data when receiving an email with really high or really low spamtiscity.
+- A reliable but slower Support Vector Machine (SVM) classifier based on the most common, significant words as features
 
-For the SVM classifier, please download this package from here: http://bit.ly/2rwxl, and
-add to the path.
+For the SVM classifier, download this package from here: http://bit.ly/2rwxl, and
+add to your Python path.
 
 Sample output:
+SpamFilter$ python filter.py 
+Reading tarfile  data/20030228_hard_ham.tar.bz2 ... done, read 252 emails.
+Reading tarfile  data/20030228_spam_2.tar.bz2   ... done, read 1399 emails.
+Reading tarfile  data/20050311_spam_2.tar.bz2   ... done, read 1398 emails.
+Read 3046 emails, 91.76% spam 
+
+Top words most likely to be spam:
+minder = 0.997942, 1316 occurrences
+cpunks = 0.997835, 1251 occurrences
+mandark = 0.997732, 1194 occurrences
+einstein = 0.997664, 1159 occurrences
+cypherpunks = 0.996160, 1409 occurrences
+sourceforge = 0.996034, 682 occurrences
+2ffont = 0.995890, 658 occurrences
+3cfont = 0.995890, 658 occurrences
+sightings = 0.995768, 639 occurrences
+
+Top words least likely to be spam:
+clickthru = 0.000189, 1950 occurences
+lockergnome = 0.000351, 1051 occurences
+comics = 0.000527, 700 occurences
+dilbert = 0.000801, 461 occurences
+anchordesk = 0.001288, 287 occurences
+techupdate = 0.001456, 254 occurences
+clear_dot = 0.001745, 212 occurences
+theregister = 0.002033, 182 occurences
+83a3cb = 0.002045, 181 occurences
+unitedmedia = 0.002140, 173 occurences
+
+Variables:
+tao- = 0.050000
+tao+ = 0.980000
+Prob(Spam) = 0.450000
+Spam cutoff = 0.750000
+Count minimum = 20
+
+########################################################
+Naive Bayes:
+67303 unique tokens
+Training error:  0.0164149704531
+Development error:  0.0223243598162
+Auto-learning on 1425 spam and 87 ham
+False positives = 0.019%
+False negatives = 0.020%
+
+########################################################
+SVM (2323 features):
+Building training samples...
+*
+optimization finished, #iter = 693
+nu = 0.004494
+obj = -4.422320, rho = 0.306859
+nSV = 180, nBSV = 2
+Total nSV = 180
+Training error: 0.000656598818122
+Building development samples...
+Development error: 0.00919238345371
+False positives = 0.005%
+False negatives = 0.000%
 

@@ -1,9 +1,12 @@
+#!/usr/bin/env python
 """ 
-A Bayesian and SVM Spam Filter by Nicholas Shelly
+Author: Nicholas Shelly
+Description A Bayesian and SVM Spam Filter
 Date: 3 Jan 2012
-The primary classification uses a Naive Bayesian model, with auto-learning capability 
-based on email with really high or really low spamtiscity.
-Compares the results to a more reliable but slower Support Vector Machine (SVM) classifier.
+This is a very quick and rudimentary spam filter, which compares a few techniques including: 
+- A Naive Bayesian classification based on the and Laplace (additive) smoothing 
+- Auto-learning to retraining data when receiving an email with really high or really low spamtiscity. 
+- A reliable but slower Support Vector Machine (SVM) classifier based on the most common, significant words as features 
 """ 
 import sys
 import random
@@ -16,7 +19,7 @@ try:
     SVM = 1
 except ImportError:
     SVM = 0
-    print "Could not find svm suite.  Please download here: http://bit.ly/2rwxl"
+    print "Could not find LIBSVM.  Please download here: http://bit.ly/2rwxl"
 
 DATA_DIR='data'
 HAM_FILES = ['20030228_hard_ham.tar.bz2',]
@@ -215,6 +218,7 @@ class SpamFilter:
         P(S|w) = P(w|S)*P(S) / [ P(w|S)*P(S) + P(w|H)*P(H) ]
         """
         if len(token) >= self.size_threshold and len(set(token)) > self.unique_threshold:
+            # Use Laplace (additive) smoothing with k=1, if feature not found
             b = self.spam[token] if token in self.spam else 1 
             g = self.ham[token] if token in self.ham else 1 
             if b+g > self.count_threshold:
@@ -298,9 +302,9 @@ class SpamFilter:
                                                  self._classify_bayes_test)
         print "Auto-learning on %d spam and %d ham" % \
                 (self.exemplar_spam, self.exemplar_ham)
-        print "False positives = %.2f%%" % \
+        print "False positives = %.3f%%" % \
                 (self.false_positives * 1.0 / (self.false_positives + self.true_positives))
-        print "False negatives = %.2f%%" % \
+        print "False negatives = %.3f%%" % \
                 (self.false_negatives * 1.00 / (self.false_negatives + self.true_negatives))
 
         self.false_positives = self.true_positives = \
@@ -319,12 +323,11 @@ class SpamFilter:
             development_samples = [(self._build_svm_features(email[0]), email[1]) \
                                 for email in self.development]
             print "Development error:", self._error(development_samples, classify_svm)
-            print "False positives = %.f%%" % \
+            print "False positives = %.3f%%" % \
                     (self.false_positives * 1.0 / (self.false_positives + self.true_positives))
-            print "False negatives = %.1f%%" % \
+            print "False negatives = %.3f%%" % \
                     (self.false_negatives * 1.00 / (self.false_negatives + self.true_negatives))
             print "\n" * 5
-            print "########################################################"
         
 def main():
     sf = SpamFilter()
