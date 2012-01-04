@@ -3,7 +3,7 @@
 Author: Nicholas Shelly
 Description A Bayesian and SVM Spam Filter
 Date: 3 Jan 2012
-This is a very quick and rudimentary spam filter, which compares a few techniques including: 
+This is a very quick and rudimentary spam filter, which deploys the following techniques:
 - A Naive Bayesian classification based on the and Laplace (additive) smoothing 
 - Auto-learning to retraining data when receiving an email with really high or really low spamtiscity. 
 - A reliable but slower Support Vector Machine (SVM) classifier based on the most common, significant words as features 
@@ -14,6 +14,7 @@ import re
 import tarfile
 import operator
 import os
+
 try:
     from svmutil import *
     SVM = 1

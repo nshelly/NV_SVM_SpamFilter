@@ -1,12 +1,12 @@
 A Bayesian and SVM Spam Filter by Nicholas Shelly
 Date: 3 Jan 2012
-This is a very quick and rudimentary spam filter, which compares a few techniques including:
+This is a very quick and rudimentary spam filter, which deploys a few techniques including:
 - A Naive Bayesian classification based on the and Laplace (additive) smoothing
 - Auto-learning to retraining data when receiving an email with really high or really low spamtiscity.
 - A reliable but slower Support Vector Machine (SVM) classifier based on the most common, significant words as features
 
 For the SVM classifier, download this package from here: http://bit.ly/2rwxl, and
-add to your Python path.
+add to your Python path, and type 'make' to create the binaries.
 
 Sample output:
 SpamFilter$ python filter.py 
