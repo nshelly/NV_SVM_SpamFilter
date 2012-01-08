@@ -89,12 +89,15 @@ class SpamFilter:
     def _get_tokens(self, content):
         """ Treat dollar signs, apostrophes and dashes as part of words;
             everything else as a token separator """
-        tokens = re.findall(r'[\w$-\']+', content)
-        tokens = [t.lower() for t in tokens]
-        for t in tokens:
-            if (len(set(t)) < self.unique_threshold or len(t) < self.size_threshold):
-                del t
-        return tokens
+        #tokens = re.findall(r'[\w$-\']+', content)
+        #tokens = [t.lower() for t in tokens \
+        #                if (len(set(t)) >= self.unique_threshold \
+        #                    and len(t) >= self.size_threshold)]
+        #return tokens
+
+        return [t.lower() for t in re.findall(r'[\w$-\']+', content) \
+                        if (len(set(t)) >= self.unique_threshold \
+                            and len(t) >= self.size_threshold)]
 
     def _parse_email(self, table, content):
         """ Parse email, adding tokens to appropriate dictionary """
@@ -109,7 +112,7 @@ class SpamFilter:
             # Future optimizations:
             # Check for urls, header tags, breadth of words (number of appearances), etc 
 
-    def load_corpus(self, files, spam=True, data_dir=DATA_DIR):
+    def load_corpus(self, files, spam=True, data_dir=None):
         """ 
         Loads corpus into the spam or ham dictionary, as well as a common dictionary
         """
@@ -118,7 +121,12 @@ class SpamFilter:
                 # File located in current directory
                 path_to_file = fname 
             else:
-                path_to_file = os.path.join(data_dir, fname)
+                if data_dir and os.path.exists(data_dir):
+                    path_to_file = os.path.join(data_dir, fname)
+                else:
+                    print "Unable to open data directory '%s'..." % (data_dir)
+                    return
+                
             print "Reading tarfile  %-30s ..." % (path_to_file),
             if tarfile.is_tarfile(path_to_file):
                 with tarfile.open(path_to_file, 'r|bz2') \
@@ -285,6 +293,9 @@ class SpamFilter:
             print "%s = %f, %d occurences" % (s[0], s[1], s[2])
           
     def print_stats(self):
+        if not self.email_data or not self.spam or not self.ham:
+            print "Error.  Insufficient email data found."
+            return
         self.num_spam = [i[1] for i in self.email_data].count(1)
         print "Read %d emails," % len(self.email_data), 
         print "{:.2%} spam ".format(self.num_spam * 1.0 / len(self.email_data))
@@ -332,8 +343,8 @@ class SpamFilter:
         
 def main():
     sf = SpamFilter()
-    sf.load_corpus(HAM_FILES, spam=False)
-    sf.load_corpus(SPAM_FILES, spam=True)
+    sf.load_corpus(HAM_FILES, spam=False, data_dir=DATA_DIR)
+    sf.load_corpus(SPAM_FILES, spam=True, data_dir=DATA_DIR)
     sf.train_data(training_percent=50)
     sf.print_stats()
 
